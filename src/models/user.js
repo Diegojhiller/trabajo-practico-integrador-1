@@ -1,7 +1,10 @@
-import { DataTypes } from 'sequelize';
-import { db } from '../config/database.js';
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config/database.js';
 
-const User = db.define('User', {
+class User extends Model{}
+
+User.init( 
+    {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -31,10 +34,12 @@ const User = db.define('User', {
         allowNull: true
     }
 }, {
-    timestamps: true,
+    sequelize,
     tableName: 'users',
-    paranoid: true,
-    underscored: true
+    timestamps: true,
+    paranoid: true, 
+    deletedAt: 'deleted_at' 
+
 });
 
 export default User;

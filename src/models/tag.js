@@ -1,7 +1,10 @@
-import { DataTypes } from 'sequelize';
-import { db } from '../config/database.js';
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config/database.js';
 
-const Tag = db.define('Tag', {
+class Tag extends Model{}
+
+Tag.init(
+    {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -16,6 +19,7 @@ const Tag = db.define('Tag', {
         }
     }
 }, {
+    sequelize,
     timestamps: true,
     tableName: 'tags',
     underscored: true

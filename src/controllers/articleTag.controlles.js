@@ -2,10 +2,10 @@ import { Article, ArticleTag, Tag } from '../models/relaciones.js';
 
 export const addTagToArticle = async (req, res) => {
     try {
-        const { articleId, tagName } = req.body;
+        const { articleId, tagId, tagName } = req.body;
 
-        if (!articleId || !tagName) {
-            return res.status(400).json({ message: 'Se requieren el ID del artículo y el nombre de la etiqueta.' });
+        if (!articleId || (!tagId && !tagName)) {
+            return res.status(400).json({ message: 'Se requiere el ID del artículo y el ID o nombre de la etiqueta.' });
         }
 
         const article = await Article.findByPk(articleId);
@@ -13,12 +13,16 @@ export const addTagToArticle = async (req, res) => {
             return res.status(404).json({ message: 'Artículo no encontrado.' });
         }
 
-        const [tag, created] = await Tag.findOrCreate({
-            where: { name: tagName.toLowerCase().replace(/\s/g, '-') }
-        });
-
-        if (article.user_id !== req.user.id && req.user.role !== 'admin') {
-            return res.status(403).json({ message: 'No tiene permisos para modificar este artículo.' });
+        let tag;
+        if (tagId) {
+            tag = await Tag.findByPk(tagId);
+            if (!tag) {
+                return res.status(404).json({ message: 'Etiqueta no encontrada.' });
+            }
+        } else {
+            [tag] = await Tag.findOrCreate({
+                where: { name: tagName.toLowerCase() }
+            });
         }
 
         await article.addTag(tag);
@@ -38,14 +42,9 @@ export const removeTagFromArticle = async (req, res) => {
         if (!articleTag) {
             return res.status(404).json({ message: 'Relación de artículo/etiqueta no encontrada.' });
         }
-
-        const article = await Article.findByPk(articleTag.article_id);
-        if (article.user_id !== req.user.id && req.user.role !== 'admin') {
-            return res.status(403).json({ message: 'No tiene permisos para modificar este artículo.' });
-        }
-
+        
         await articleTag.destroy();
-
+        
         res.status(200).json({ message: 'Etiqueta removida del artículo exitosamente.' });
     } catch (error) {
         console.error('Error al remover etiqueta:', error);

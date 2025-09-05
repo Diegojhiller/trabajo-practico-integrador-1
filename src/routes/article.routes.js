@@ -7,7 +7,7 @@ import {
     updateArticle, 
     deleteArticle 
 } from '../controllers/article.controllers.js';
-import { authenticate, authorize } from '../middlewares/authenticate.js';
+import { authenticate, authorizeOwner } from '../middlewares/authenticate.js';
 
 const router = Router();
 

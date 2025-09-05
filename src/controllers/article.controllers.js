@@ -1,6 +1,5 @@
 import { Article, Tag, User } from '../models/relaciones.js';
 import { validationResult } from 'express-validator';
-import { Op } from 'sequelize';
 
 export const getAllArticles = async (req, res) => {
     try {

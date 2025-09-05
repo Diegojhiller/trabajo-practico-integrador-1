@@ -1,7 +1,10 @@
-import { DataTypes } from 'sequelize';
-import { db } from '../config/database.js';
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config/database.js';
 
-const Profile = db.define('Profile', {
+class Profile extends Model{}
+
+Profile.init(
+    {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -32,7 +35,9 @@ const Profile = db.define('Profile', {
         type: DataTypes.DATEONLY,
         allowNull: true
     }
-}, {
+}, 
+    {
+    sequelize,
     timestamps: true,
     tableName: 'profiles',
     underscored: true

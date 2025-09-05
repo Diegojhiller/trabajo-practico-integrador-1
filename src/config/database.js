@@ -1,7 +1,9 @@
 import { Sequelize } from 'sequelize';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 
-const db = new Sequelize(
+dotenv.config();
+
+const sequelize = new Sequelize(
     process.env.DB_NAME, 
     process.env.DB_USER, 
     process.env.DB_PASSWORD, {
@@ -10,14 +12,4 @@ const db = new Sequelize(
         logging: false,
 });
 
-const connectDB = async () => {
-    try {
-        await db.authenticate();
-        console.log('Hay conexion con la base de datos');
-    } catch (error) {
-        console.error('No se pudo conectar con la base de datos:', error);
-        process.exit(1);
-    }
-};
-
-export { db, connectDB };
+export default sequelize;

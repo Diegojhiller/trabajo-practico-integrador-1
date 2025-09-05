@@ -1,26 +1,28 @@
-import User from './user.js';
-import Profile from './profile.js';
-import Article from './article.js';
-import Tag from './tag.js';
-import ArticleTag from './articleTag.js';
+import User from '../models/user.js';
+import Profile from '../models/profile.js';
+import Article from '../models/article.js';
+import Tag from '../models/tag.js';
+import ArticleTag from '../models/articleTag.js';
 
-User.hasOne(Profile, { as: 'profile', foreignKey: 'user_id' });
-Profile.belongsTo(User, { as: 'user', foreignKey: 'user_id' });
+User.hasOne(Profile, { foreignKey: 'user_id', as: 'profile' });
+Profile.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
-User.hasMany(Article, { as: 'articles', foreignKey: 'user_id' });
-Article.belongsTo(User, { as: 'author', foreignKey: 'user_id' });
+User.hasMany(Article, { foreignKey: 'user_id', as: 'articles' });
+Article.belongsTo(User, { foreignKey: 'user_id', as: 'author' });
 
 Article.belongsToMany(Tag, {
     through: ArticleTag,
     as: 'tags',
     foreignKey: 'article_id',
-    otherKey: 'tag_id'
+    otherKey: 'tag_id',
+    onDelete: 'CASCADE'
 });
 Tag.belongsToMany(Article, {
     through: ArticleTag,
     as: 'articles',
     foreignKey: 'tag_id',
-    otherKey: 'article_id'
+    otherKey: 'article_id',
+    onDelete: 'CASCADE'
 });
 
 export {
