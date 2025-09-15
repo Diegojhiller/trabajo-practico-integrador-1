@@ -1,9 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database.js';
 
-class Article extends Model{}
-
-Article.init(
+const Article = sequelize.define(
+'Article',
     {
     id: {
         type: DataTypes.INTEGER,
